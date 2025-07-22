@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rencana Proyek Interaktif: Star-Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Nebula -->
+    <!-- Application Structure Plan: SPA ini dirancang dengan struktur tematik berbasis navigasi untuk memecah dokumen rencana proyek yang padat menjadi bagian-bagian yang mudah dicerna. Strukturnya adalah: 1. Header Navigasi Tetap untuk akses cepat. 2. Bagian 'Premis' untuk pengenalan cerita. 3. Bagian 'Cetak Biru Proyek' yang memvisualisasikan struktur file dan data. 4. Bagian 'Konsol Perintah' interaktif (accordion) untuk menjelajahi setiap fungsi secara mendalam tanpa dibanjiri informasi. 5. Bagian 'Spesifikasi Teknis' untuk aturan. Struktur ini dipilih untuk mengubah pengalaman membaca dokumen statis menjadi eksplorasi interaktif, meningkatkan pemahaman dan keterlibatan pengguna. -->
+    <!-- Visualization & Content Choices: 1. Struktur File -> Goal: Inform -> Viz: Donut Chart (Chart.js) -> Interaction: Hover untuk detail -> Justification: Memberikan ringkasan visual cepat dari komposisi file proyek. 2. Spesifikasi Fungsional (F01-F14) -> Goal: Organize & Inform -> Viz: Accordion List -> Interaction: Klik untuk membuka/menutup detail fungsi -> Justification: Mencegah kelebihan informasi dan memungkinkan fokus pada satu perintah pada satu waktu, meniru pengalaman eksplorasi API atau dokumentasi teknis. 3. Struktur Data File -> Goal: Inform -> Viz: Styled Code Blocks -> Interaction: None -> Justification: Format standar dan paling jelas untuk menampilkan struktur data atau kode. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .section-title {
+            border-bottom: 2px solid #0077b6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .command-btn {
+            transition: all 0.3s ease;
+        }
+        .command-btn.active {
+            background-color: #0077b6;
+            color: white;
+        }
+        .command-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 1.5rem;
+        }
+        .command-content.show {
+            max-height: 1000px; /* Cukup besar untuk menampung konten */
+            padding: 1.5rem;
+        }
+        .code-block {
+            background-color: #212529;
+            color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #0077b6;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-800">🚀 Star-Trader</h1>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#premise" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Premis</a>
+                <a href="#blueprint" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Cetak Biru</a>
+                <a href="#commands" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Perintah</a>
+                <a href="#specs" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Spesifikasi</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#premise" class="block py-2 px-4 text-sm hover:bg-gray-200">Premis</a>
+            <a href="#blueprint" class="block py-2 px-4 text-sm hover:bg-gray-200">Cetak Biru</a>
+            <a href="#commands" class="block py-2 px-4 text-sm hover:bg-gray-200">Perintah</a>
+            <a href="#specs" class="block py-2 px-4 text-sm hover:bg-gray-200">Spesifikasi</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Section 1: Premise -->
+        <section id="premise" class="my-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center mb-2 text-gray-800">Premis Proyek</h2>
+            <p class="text-center text-gray-500 mb-12">Memahami dunia dan tujuan utama dari game simulasi Star-Trader.</p>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 section-title">Latar Belakang Cerita</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Selamat datang, Kapten! Di abad ke-25, Anda adalah seorang pilot muda yang memulai karir sebagai pedagang independen dengan kapal kargo tua, "The Rusty Comet". Tujuan Anda adalah membangun imperium perdagangan, menavigasi politik antarplanet, menghindari bajak laut, dan memanfaatkan setiap peluang pasar. Untuk berhasil, Anda harus merancang dan membangun jantung digital dari operasi Anda: **Sistem Manajemen Star-Trader**.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 section-title">Alur Permainan Inti</h3>
+                    <ol class="list-decimal list-inside space-y-3 text-gray-600">
+                        <li>Memulai permainan dengan kredit dan kapal dasar.</li>
+                        <li>Menjelajahi galaksi, bepergian antar planet.</li>
+                        <li>Melakukan jual beli komoditas untuk mencari keuntungan.</li>
+                        <li>Mengunjungi bengkel untuk mengisi bahan bakar dan upgrade kapal.</li>
+                        <li>Menyelesaikan misi untuk mendapatkan hadiah tambahan.</li>
+                        <li>Tujuan akhir: Menjadi pedagang terkaya di galaksi.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Blueprint -->
+        <section id="blueprint" class="my-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center mb-2 text-gray-800">Cetak Biru Proyek</h2>
+            <p class="text-center text-gray-500 mb-12">Struktur file, data eksternal, dan visualisasi komposisi proyek.</p>
+
+            <div class="grid md:grid-cols-5 gap-8">
+                <div class="md:col-span-3 bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 section-title">Struktur File & Data</h3>
+                    <p class="mb-6 text-gray-600">Proyek ini dirancang secara modular untuk kemudahan pengembangan. Data game dimuat dari file eksternal untuk fleksibilitas.</p>
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-gray-700">Struktur File Kode</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600">
+                                <li>main.cpp</li>
+                                <li>player.h/.cpp</li>
+                                <li>ship.h/.cpp</li>
+                                <li>galaxy.h/.cpp</li>
+                                <li>market.h/.cpp</li>
+                                <li>mission.h/.cpp</li>
+                                <li>utility.h/.cpp</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-gray-700">File Data Eksternal</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600">
+                                <li>planets.csv</li>
+                                <li>goods.csv</li>
+                                <li>missions.csv</li>
+                                <li>save_data/nama_pemain.txt</li>
+                            </ul>
+                        </div>
+                    </div>
+                     <div class="mt-6">
+                        <h4 class="font-bold text-lg mb-2 text-gray-700">Contoh Struktur `save_data/StarLord.txt`</h4>
+                        <div class="code-block text-sm">
+StarLord          // Baris 1: Nama Kapten
+15000             // Baris 2: Kredit
+The Rusty Comet   // Baris 3: Nama Kapal
+100               // Baris 4: Bahan Bakar Saat Ini
+100               // Baris 5: Bahan Bakar Maksimum
+25                // Baris 6: Kargo Maksimum
+2                 // Baris 7: Jumlah jenis barang di kargo
+Titanium;10       // Baris 8: Barang 1;jumlah
+Alga Medis;5      // Baris 9: Barang 2;jumlah
+3                 // Baris 10: ID Planet Lokasi Saat Ini
+1                 // Baris 11: ID Misi Aktif (0 jika tidak ada)
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-2 bg-white p-8 rounded-lg shadow-lg flex flex-col justify-center items-center">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Komposisi File Proyek</h3>
+                    <div class="chart-container w-full max-w-sm mx-auto h-64 md:h-80">
+                        <canvas id="projectCompositionChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">Visualisasi perbandingan jumlah file berdasarkan tipenya dalam proyek.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Commands -->
+        <section id="commands" class="my-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center mb-2 text-gray-800">Konsol Perintah</h2>
+            <p class="text-center text-gray-500 mb-12">Jelajahi setiap fungsi yang tersedia dalam game. Klik untuk melihat detail.</p>
+            
+            <div id="commands-accordion" class="space-y-2">
+                <!-- Commands will be injected here by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4: Specs -->
+        <section id="specs" class="my-16 scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center mb-2 text-gray-800">Spesifikasi Teknis</h2>
+            <p class="text-center text-gray-500 mb-12">Aturan dan batasan yang harus diikuti selama pengembangan.</p>
+
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="text-blue-500 font-bold mr-3">1.</span>
+                        <p><strong class="text-gray-800">Bahasa:</strong> C++.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-500 font-bold mr-3">2.</span>
+                        <p><strong class="text-gray-800">Paradigma:</strong> Wajib **prosedural**. Gunakan `struct` untuk data, tapi semua logika harus dalam bentuk fungsi. **Dilarang menggunakan `class` dan OOP**.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-500 font-bold mr-3">3.</span>
+                        <p><strong class="text-gray-800">Library:</strong> Hanya boleh `iostream`, `fstream`, `string`, `vector`, dan library C standar. Konfirmasi ke asisten jika butuh library lain.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-500 font-bold mr-3">4.</span>
+                        <p><strong class="text-gray-800">Kompilasi:</strong> Program harus bisa dikompilasi dan dijalankan di lingkungan Linux/WSL menggunakan `makefile`.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-500 font-bold mr-3">5.</span>
+                        <p><strong class="text-gray-800">Modularitas:</strong> Kode harus dipecah ke dalam beberapa file `.h` dan `.cpp` sesuai rekomendasi.</p>
+                    </li>
+                     <li class="flex items-start">
+                        <span class="text-red-500 font-bold mr-3">!</span>
+                        <p><strong class="text-gray-800">PENTING:</strong> Dilarang menggunakan fungsi parsing bawaan seperti `strtok` atau `sscanf`. Buat parser CSV kustom.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white text-center p-4 mt-12">
+        <p>&copy; 2025 Star-Trader Project Plan. Dibuat untuk mempermudah pengembangan.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                     if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Chart.js - Project Composition Chart
+            const ctx = document.getElementById('projectCompositionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Header Files (.h)', 'Source Files (.cpp)', 'Data Files (.csv)', 'Save Files (.txt)'],
+                    datasets: [{
+                        label: 'Jumlah File',
+                        data: [7, 7, 3, 1], // Based on the file structure
+                        backgroundColor: [
+                            'rgba(0, 119, 182, 0.8)',
+                            'rgba(0, 180, 216, 0.8)',
+                            'rgba(144, 224, 239, 0.8)',
+                            'rgba(202, 240, 248, 0.8)'
+                        ],
+                        borderColor: [
+                            '#0077b6',
+                            '#00b4d8',
+                            '#90e0ef',
+                            '#caf0f8'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#343a40',
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Commands Accordion
+            const commandsData = [
+                { id: 'F01', title: 'KARAKTER_BARU', desc: 'Membuat profil pemain baru.', access: 'Sebelum login/memuat game.', scenario: `> KARAKTER_BARU\nMasukkan nama Kapten Anda: StarLord\n\nProfil Kapten StarLord berhasil dibuat. Selamat datang di galaksi!` },
+                { id: 'F02', title: 'MUAT_PERMAINAN', desc: 'Memuat progres permainan dari file save.', access: 'Sebelum login/memuat game.', scenario: `> MUAT_PERMAINAN\nMasukkan nama Kapten: StarLord\n\nData Kapten StarLord berhasil dimuat. Selamat melanjutkan perjalanan!` },
+                { id: 'F03', title: 'SIMPAN_PERMAINAN', desc: 'Menyimpan status permainan saat ini.', access: 'Saat sudah masuk dalam game.', scenario: `> SIMPAN_PERMAINAN\n\nProgres permainan berhasil disimpan.` },
+                { id: 'F04', title: 'KELUAR', desc: 'Keluar dari program, dengan konfirmasi untuk menyimpan.', access: 'Kapan saja.', scenario: `> KELUAR\n\nApakah Anda ingin menyimpan progres sebelum keluar? (y/n): y\nProgres permainan berhasil disimpan. Sampai jumpa, Kapten!` },
+                { id: 'F05', title: 'STATUS', desc: 'Menampilkan informasi lengkap pemain dan kapal.', access: 'Saat sudah masuk dalam game.', scenario: `> STATUS\n\n--- STATUS KAPAL ---\nKapten          : StarLord\nKredit Galaktik : 5000 G\nLokasi Saat Ini : Planet Terra [Sektor Alpha]\n\n--- Spesifikasi 'The Rusty Comet' ---\nBahan Bakar     : 85/100 SU\nRuang Kargo     : 15/20 Ton\n  - 10 Ton Titanium\n  - 5 Ton Alga Medis\nMesin           : Level 1` },
+                { id: 'F06', title: 'NAVIGASI', desc: 'Menampilkan peta galaksi dan memungkinkan perjalanan.', access: 'Saat sudah masuk dalam game.', scenario: `> NAVIGASI\n\nPlanet Tujuan yang Terjangkau:\n1. Cygnus X1 (Jarak: 15 SU)\n2. Kepler-186f (Jarak: 25 SU)\n\n> PERGI KE CYGNUS X1\n\nMelakukan perjalanan ke Cygnus X1... Bahan bakar berkurang 15 SU. Anda telah tiba.` },
+                { id: 'F07', title: 'PASAR', desc: 'Menampilkan komoditas yang dijual di planet.', access: 'Saat berada di planet.', scenario: `> PASAR\n\n--- Pasar Komoditas Planet Terra ---\n| Nama Barang  | Harga Beli | Stok    |\n|--------------|------------|---------|\n| Titanium     | 250 G/Ton  | 50 Ton  |\n| Air Murni    | 50 G/Ton   | 200 Ton |` },
+                { id: 'F08', title: 'BELI', desc: 'Membeli sejumlah barang dari pasar.', access: 'Saat berada di planet.', scenario: `> BELI Titanium 5\n\nBerhasil membeli 5 Ton Titanium seharga 1250 G.` },
+                { id: 'F09', title: 'JUAL', desc: 'Menjual sejumlah barang dari kargo.', access: 'Saat berada di planet.', scenario: `> JUAL Alga Medis 5\n\nBerhasil menjual 5 Ton Alga Medis seharga 1500 G.` },
+                { id: 'F10', title: 'BENGKEL', desc: 'Menampilkan opsi isi bahan bakar atau upgrade.', access: 'Saat berada di planet (jika tersedia).', scenario: `> BENGKEL\n\n--- BENGKEL OTOMATIS ---\n1. Isi Bahan Bakar (10 G / SU)\n2. Upgrade Ruang Kargo ke Level 2 (2000 G)\n\n> UPGRADE KARGO\n\nRuang kargo berhasil di-upgrade! Kapasitas sekarang 40 Ton.` },
+                { id: 'F11', title: 'PAPAN_MISI', desc: 'Menampilkan daftar misi yang tersedia.', access: 'Saat berada di planet.', scenario: `> PAPAN_MISI\n\n--- Misi Tersedia ---\n[1] Antar 20 Ton Air Murni ke Planet Oasis. Hadiah: 1000 G.` },
+                { id: 'F12', title: 'TERIMA_MISI', desc: 'Menerima sebuah misi dari papan misi.', access: 'Saat melihat papan misi.', scenario: `> TERIMA_MISI 1\n\nMisi diterima: Antar 20 Ton Air Murni ke Planet Oasis.` },
+                { id: 'F13', title: 'STATUS_MISI', desc: 'Menampilkan detail misi yang sedang aktif.', access: 'Saat sudah masuk dalam game.', scenario: `> STATUS_MISI\n\n--- Misi Aktif ---\nTujuan: Antar 20 Ton Air Murni ke Planet Oasis.\nProgres: 0/20 Ton Air Murni di kargo.\nHadiah: 1000 G.` },
+                { id: 'F14', title: 'BANTUAN', desc: 'Menampilkan daftar semua perintah yang tersedia.', access: 'Kapan saja.', scenario: `> BANTUAN\n\nDaftar Perintah Tersedia:\n- KARAKTER_BARU : Membuat karakter baru.\n- MUAT_PERMAINAN : Memuat permainan yang sudah ada.\n... dan seterusnya ...` }
+            ];
+
+            const accordionContainer = document.getElementById('commands-accordion');
+            commandsData.forEach(cmd => {
+                const item = document.createElement('div');
+                item.className = 'bg-white rounded-lg shadow-md';
+                item.innerHTML = `
+                    <button class="command-btn w-full text-left p-4 flex justify-between items-center rounded-lg hover:bg-blue-100 focus:outline-none">
+                        <span class="font-bold text-lg text-gray-700">${cmd.id} - ${cmd.title}</span>
+                        <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="command-content bg-gray-50 rounded-b-lg">
+                        <p class="mb-4 text-gray-600">${cmd.desc}</p>
+                        <p class="mb-4"><strong class="font-semibold text-gray-800">Akses:</strong> ${cmd.access}</p>
+                        <div>
+                            <p class="font-semibold mb-2 text-gray-800">Contoh Skenario:</p>
+                            <div class="code-block text-sm">${cmd.scenario}</div>
+                        </div>
+                    </div>
+                `;
+                accordionContainer.appendChild(item);
+            });
+
+            accordionContainer.addEventListener('click', function(e) {
+                const button = e.target.closest('.command-btn');
+                if (!button) return;
+
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('svg');
+
+                // Close all other items
+                accordionContainer.querySelectorAll('.command-btn').forEach(btn => {
+                    if (btn !== button) {
+                        btn.classList.remove('active');
+                        btn.nextElementSibling.classList.remove('show');
+                        btn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Toggle current item
+                button.classList.toggle('active');
+                content.classList.toggle('show');
+                icon.style.transform = content.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
